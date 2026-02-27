@@ -1,14 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Game</title>
-  <link rel="stylesheet" href="css/style.css">
+    <title>Sorting Game</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<h2>Time: <span id="timer">0</span>s</h2>
-<div id="numbers"></div>
-<div id="numbersContainer"></div>
+<div class="game-container">
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+
+        <div class="timer-box">
+            <p>Time:</p>
+            <h2 id="timer">00:00</h2>
+        </div>
+
+        <button class="exit-btn"><a href="index.html">Exit / Home</a></button>
+
+    </div>
+
+    <!-- Selected Numbers -->
+    <div class="selected-section">
+        <h3>Selected Numbers:</h3>
+        <div id="selectedNumbers"></div>
+    </div>
+
+    <!-- Game Area -->
+    <div class="game-area" id="numbersContainer">
+        <!-- Circles will be generated here -->
+    </div>
+
+</div>
+
 <script src="js/game.js"></script>
+
 </body>
 </html>
