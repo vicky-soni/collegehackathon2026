@@ -1,59 +1,52 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Number Sorting Game</title>
-<link rel="stylesheet" href="css/style.css">
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Number Sorting Game</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
 
-<body>
+  <body>
+    <div class="container">
+      <h1>Number Sorting Game</h1>
 
-<div class="container">
-
-    <h1>Number Sorting Game</h1>
-
-    <div class="form-group">
+      <div class="form-group">
         <label>Choose Range Of Numbers</label>
         <label>From:</label>
-        <input type="number" id="from" value="1">
-    </div>
+        <input type="number" id="from" value="1" />
+      </div>
 
-    <div class="form-group">
+      <div class="form-group">
         <label>To:</label>
-        <input type="number" max="50" id="to" value="10">
-    </div>
+        <input type="number" max="50" id="to" value="10" />
+      </div>
 
-    <div class="form-group">
-
+      <div class="form-group">
         <label>Count:</label>
-        <input type="number" id="count" value="10">
-        <label>Count Of Numbers:</label>
-        <input type="number" max="50" id="count" value="10">
-    </div>
+        <input type="number" id="count" value="10" />
+      </div>
 
-    <div class="form-group">
+      <div class="form-group">
         <label>Sort Type:</label>
         <select id="sortType">
-            <option value="ascending">Ascending</option>
-            <option value="descending">Descending</option>
+          <option value="ascending">Ascending</option>
+          <option value="descending">Descending</option>
         </select>
-    </div>
+      </div>
 
-    <div class="form-group">
+      <div class="form-group">
         <label>Level:</label>
         <select id="level">
-            <option value="Easy">Easy</option>
-            <option value="Medium">Medium</option>
-            <option value="Hard">Hard</option>
+          <option value="Easy">Easy</option>
+          <option value="Medium">Medium</option>
+          <option value="Hard">Hard</option>
         </select>
+      </div>
+
+      <button id="playBtn">Start Game</button>
     </div>
 
-    <button id="playBtn">Start Game</button>
-
-</div>
-
-<script src="js/home.js"></script>
-
-</body>
+    <script src="js/home.js"></script>
+  </body>
 </html>
