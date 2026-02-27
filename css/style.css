@@ -39,20 +39,29 @@ label {
   margin-right: 5px;
 }
 
+/* ===== INPUTS & SELECT ===== */
 input, select {
-  padding: 6px 8px;
+  padding: 10px 12px;       /* thoda bada padding */
   margin: 8px 5px;
   border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
-  width: 80px;
+  border-radius: 8px;       /* rounded corners */
+  font-size: 16px;          /* bada text */
+  width: 120px;             /* wider box for select */
+  outline: none;
+  transition: 0.2s ease;
+}
+
+/* Hover / focus effect */
+input:focus, select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0,123,255,0.5);
 }
 
 /* ===== BUTTON STYLE ===== */
 button {
   margin-top: 15px;
   padding: 8px 18px;
-  background-color: lightgoldenrodyellow;
+  background-color: yellow;
   border: none;
   color: green;
   border-radius: 5px;
@@ -62,7 +71,7 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3); 
 }
 
 /* ===== TIMER BAR ===== */
