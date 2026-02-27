@@ -1,35 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sorting Game</title>
-    <link rel="stylesheet" href="css/style.css">
+<title>Sorting Game</title>
+
+<link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
 <div class="game-container">
 
-    <!-- Top Bar -->
-    <div class="top-bar">
+<div class="top-bar">
+<div class="timer-box">
+Time: <span id="timer">00:00</span>
+</div>
 
-        <div class="timer-box">
-            <p>Time:</p>
-            <h2 id="timer">00:00</h2>
-        </div>
+<button class="exit-btn" onclick="goHome()">Exit</button>
+</div>
 
-        <button class="exit-btn"><a href="index.html">Exit / Home</a></button>
+<h3>Selected Numbers</h3>
+<div id="selectedNumbers"></div>
 
-    </div>
-
-    <!-- Selected Numbers -->
-    <div class="selected-section">
-        <h3>Selected Numbers:</h3>
-        <div id="selectedNumbers"></div>
-    </div>
-
-    <!-- Game Area -->
-    <div class="game-area" id="numbersContainer">
-        <!-- Circles will be generated here -->
-    </div>
+<div class="game-area" id="numbersContainer"></div>
 
 </div>
 

@@ -1,8 +1,10 @@
-// =====================================
-// 1️⃣ LOAD SETTINGS FROM HOME PAGE
-// =====================================
+// ================= LOAD SETTINGS =================
 
 let settings = JSON.parse(localStorage.getItem("gameSettings"));
+
+if (!settings) {
+    window.location.href = "index.html";
+}
 
 let from = settings.from;
 let to = settings.to;
@@ -11,31 +13,28 @@ let level = settings.level;
 let sortType = settings.sort;
 
 
-// =====================================
-// 2️⃣ LEVEL LOGIC
-// =====================================
+// ================= LEVEL RULES =================
 
 let timeLimit;
 let floatMode = false;
 
 if (level === "Easy") {
-    timeLimit = count * 10;   // more time
+    timeLimit = null; // No timer
 }
-else if (level === "Medium") {
-    timeLimit = count * 6;
-}
-else if (level === "Hard") {
+
+if (level === "Medium") {
     timeLimit = count * 5;
+}
+
+if (level === "Hard") {
+    timeLimit = count * 4;
     floatMode = true;
-    to = to * 10; // complex numbers
 }
 
 
-// =====================================
-// 3️⃣ GENERATE UNIQUE NUMBERS
-// =====================================
+// ================= GENERATE UNIQUE NUMBERS =================
 
-function generateNumbers(min, max, count, floatMode) {
+function generateNumbers() {
 
     let set = new Set();
 
@@ -45,10 +44,12 @@ function generateNumbers(min, max, count, floatMode) {
 
         if (floatMode) {
             num = parseFloat(
-                (Math.random() * (max - min) + min).toFixed(2)
+                (Math.random() * (to - from) + from).toFixed(2)
             );
         } else {
-            num = Math.floor(Math.random() * (max - min + 1)) + min;
+            num = Math.floor(
+                Math.random() * (to - from + 1)
+            ) + from;
         }
 
         set.add(num);
@@ -57,141 +58,218 @@ function generateNumbers(min, max, count, floatMode) {
     return Array.from(set);
 }
 
-let originalNumbers =
-    generateNumbers(from, to, count, floatMode);
+let originalNumbers = generateNumbers();
 
 
-// =====================================
-// 4️⃣ CREATE CORRECT SORTED ANSWER
-// =====================================
+// ================= BUBBLE SORT =================
 
-let correctAnswer = [...originalNumbers];
+function bubbleSort(arr, asc = true) {
 
-if (sortType === "ascending") {
-    correctAnswer.sort((a, b) => a - b);
-} else {
-    correctAnswer.sort((a, b) => b - a);
+    let a = [...arr];
+
+    for (let i = 0; i < a.length; i++) {
+        for (let j = 0; j < a.length - i - 1; j++) {
+
+            if (asc ? a[j] > a[j + 1] : a[j] < a[j + 1]) {
+                [a[j], a[j + 1]] = [a[j + 1], a[j]];
+            }
+
+        }
+    }
+
+    return a;
 }
 
+let correctAnswer = bubbleSort(
+    originalNumbers,
+    sortType === "ascending"
+);
 
-// =====================================
-// 5️⃣ SHOW NUMBERS ON SCREEN
-// =====================================
+
+// ================= GAME VARIABLES =================
+
+let expectedIndex = 0;
+let userAnswer = [];
+let totalClicks = 0;
 
 let container = document.getElementById("numbersContainer");
 let selectedBox = document.getElementById("selectedNumbers");
 
-// show numbers text
-selectedBox.innerText = originalNumbers.join(", ");
 
-originalNumbers.forEach(num => {
+// ================= SAFE RANDOM POSITION =================
 
-    let circle = document.createElement("div");
-    circle.className = "number-circle";
-    circle.innerText = num;
+let usedPositions = [];
 
-    // random position
-    circle.style.top = Math.random() * 240 + "px";
-    circle.style.left = Math.random() * 850 + "px";
+function getSafePosition() {
 
-    container.appendChild(circle);
-});
+    let x, y, valid;
 
+    do {
 
-// =====================================
-// 6️⃣ TIMER SYSTEM
-// =====================================
+        valid = true;
+        x = Math.random() * 800;
+        y = Math.random() * 260;
 
-let timeRemaining = timeLimit;
-let timerDisplay = document.getElementById("timer");
+        for (let pos of usedPositions) {
 
-function formatTime(sec) {
+            let dx = pos.x - x;
+            let dy = pos.y - y;
 
-    let m = Math.floor(sec / 60);
-    let s = sec % 60;
+            if (Math.sqrt(dx * dx + dy * dy) < 70) {
+                valid = false;
+                break;
+            }
+        }
 
-    return `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+    } while (!valid);
+
+    usedPositions.push({ x, y });
+    return { x, y };
 }
 
-timerDisplay.innerText = formatTime(timeRemaining);
 
-let timer = setInterval(() => {
+// ================= CREATE CIRCLES =================
 
-    timeRemaining--;
-    timerDisplay.innerText = formatTime(timeRemaining);
+function createCircles() {
 
-    if (timeRemaining <= 0) {
-        clearInterval(timer);
-        finishGame(false); // timeout
+    container.innerHTML = "";
+    usedPositions = [];
+
+    originalNumbers.forEach(num => {
+
+        let div = document.createElement("div");
+        div.className = "number";
+        div.innerText = num;
+
+        let pos = getSafePosition();
+        div.style.left = pos.x + "px";
+        div.style.top = pos.y + "px";
+
+        div.onclick = function () {
+            handleClick(div, num);
+        };
+
+        container.appendChild(div);
+
+    });
+}
+
+
+// ================= CLICK LOGIC =================
+
+function handleClick(element, value) {
+
+    totalClicks++;
+
+    let correctValue = correctAnswer[expectedIndex];
+
+    if (value === correctValue) {
+
+        element.classList.add("correct");
+        element.onclick = null;
+
+        userAnswer.push(value);
+        selectedBox.innerText = userAnswer.join(", ");
+
+        expectedIndex++;
+
+        if (expectedIndex === count) {
+            finishGame(true);
+        }
+
+    } else {
+
+        element.classList.add("wrong");
+
+        // small shake effect
+        element.style.transform = "translateX(5px)";
+        setTimeout(() => element.style.transform = "translateX(-5px)", 100);
+        setTimeout(() => {
+            element.style.transform = "translateX(0)";
+            element.classList.remove("wrong");
+        }, 250);
+    }
+}
+
+
+// ================= TIMER =================
+
+let timerInterval;
+let timeRemaining = timeLimit;
+
+function startTimer() {
+
+    if (timeLimit === null) {
+        document.getElementById("timer").innerText = "∞";
+        return;
     }
 
-}, 1000);
+    updateTimer();
+
+    timerInterval = setInterval(() => {
+
+        timeRemaining--;
+        updateTimer();
+
+        if (timeRemaining <= 0) {
+            finishGame(false);
+        }
+
+    }, 1000);
+}
+
+function updateTimer() {
+
+    let m = Math.floor(timeRemaining / 60);
+    let s = timeRemaining % 60;
+
+    document.getElementById("timer").innerText =
+        `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+}
 
 
-// =====================================
-// 7️⃣ SIMULATED USER ANSWER
-// (Replace later with real user sorting)
-// =====================================
-
-let userAnswer = [...originalNumbers];
-
-
-// =====================================
-// 8️⃣ FINISH GAME FUNCTION
-// =====================================
+// ================= FINISH GAME =================
 
 function finishGame(userFinished) {
 
-    clearInterval(timer);
+    clearInterval(timerInterval);
 
-    let correctCount = 0;
+    // Accuracy based on minimum optimal clicks
+    let accuracy = totalClicks === 0
+        ? 0
+        : ((count / totalClicks) * 100);
 
-    for (let i = 0; i < count; i++) {
-        if (userAnswer[i] === correctAnswer[i]) {
-            correctCount++;
-        }
-    }
+    if (accuracy > 100) accuracy = 100;
 
-    let accuracy =
-        ((correctCount / count) * 100).toFixed(2);
+    accuracy = accuracy.toFixed(2);
 
-    let score = 0;
+    // Score formula
+    let score = Math.floor(
+        accuracy * 5 + (timeRemaining || 0) * 3
+    );
 
-    if (userFinished) {
-        score = Math.floor(
-            accuracy * 10 + timeRemaining * 5
-        );
-    }
-
-    let resultData = {
-
-        level: level,
-        sortType: sortType,
-
+    localStorage.setItem("gameResult", JSON.stringify({
+        level,
+        sortType,
         original: originalNumbers,
         correct: correctAnswer,
         user: userAnswer,
-
-        accuracy: accuracy,
-        score: score,
-
-        timeLeft: timeRemaining,
-        totalTime: timeLimit
-    };
-
-    localStorage.setItem(
-        "gameResult",
-        JSON.stringify(resultData)
-    );
+        accuracy,
+        score
+    }));
 
     window.location.href = "result.html";
 }
 
 
-// =====================================
-// 9️⃣ EXIT BUTTON
-// =====================================
+// ================= EXIT =================
 
 function goHome() {
-    window.location.href = "home.html";
+    window.location.href = "index.html";
 }
+
+
+// ================= AUTO START =================
+
+createCircles();
+startTimer();
