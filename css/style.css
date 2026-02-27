@@ -8,7 +8,7 @@
 
 /* ===== BODY ===== */
 body {
-  background: #f4f6f9;
+  background: #f4f6f9;   /* light gray */
   text-align: center;
   color: #333;
 }
@@ -17,13 +17,13 @@ body {
 .container {
   width: 500px;
   margin: 60px auto;
-  background: #ffffff;
+  background: #ffffff;     /* white card */
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-/* ===== TITLE ===== */
+/* ===== TITLES ===== */
 h1, h2 {
   margin-bottom: 20px;
   font-weight: 600;
@@ -31,47 +31,61 @@ h1, h2 {
 
 /* ===== FORM / SETUP BOX ===== */
 .box {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
   margin-top: 20px;
 }
 
-label {
+/* Inline labels */
+.box label {
+  display: inline-block;
+  width: 60px;
+  text-align: right;
   font-size: 14px;
   margin-right: 5px;
 }
 
 /* ===== INPUTS & SELECT ===== */
-input, select {
-  padding: 10px 12px;       /* thoda bada padding */
-  margin: 8px 5px;
+.box input,
+.box select {
+  padding: 8px 10px;
+  font-size: 16px;
+  border-radius: 5px;
   border: 1px solid #ccc;
-  border-radius: 8px;       /* rounded corners */
-  font-size: 16px;          /* bada text */
-  width: 120px;             /* wider box for select */
+  width: 100px;
   outline: none;
   transition: 0.2s ease;
+  vertical-align: middle;
 }
 
-/* Hover / focus effect */
-input:focus, select:focus {
+.box input:focus,
+.box select:focus {
   border-color: #007bff;
-  box-shadow: 0 0 5px rgba(0,123,255,0.5);
+  box-shadow: 0 0 5px rgba(0,123,255,0.3);
 }
 
 /* ===== BUTTON STYLE ===== */
 button {
   margin-top: 15px;
-  padding: 8px 18px;
-  background-color: yellow;
+  padding: 10px 20px;
+  background-color: #f9d71c;  /* yellow */
   border: none;
-  color: green;
+  color: #333;                 /* dark text */
   border-radius: 5px;
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: bold;
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 button:hover {
-  box-shadow: 0 8px 16px rgba(0,0,0,0.3); 
+  background-color: #ffd700;
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
 }
 
 /* ===== TIMER BAR ===== */
@@ -97,25 +111,26 @@ button:hover {
   margin: 10px;
   border-radius: 50%;
   border: none;
-  background-color: #1e90ff;
+  background-color: #1e90ff;   /* blue buttons */
   color: #fff;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .number-btn:hover {
   background-color: #0d6efd;
+  transform: scale(1.1);
 }
 
 /* ===== CORRECT / WRONG STATES ===== */
 .correct {
-  background-color: #28a745 !important;
+  background-color: #28a745 !important;  /* green */
 }
 
 .wrong {
-  background-color: #dc3545 !important;
+  background-color: #dc3545 !important;  /* red */
 }
 
 /* ===== RESULT BOX ===== */
@@ -131,4 +146,38 @@ button:hover {
 /* ===== HOME BUTTON ===== */
 .home-btn {
   margin-top: 15px;
+}
+
+/* ===== COUNT + SORT TYPE STACK ===== */
+.count-sort-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 10px 5px;
+}
+
+.count-sort-group label {
+  display: inline-block;
+  width: 60px;
+  text-align: right;
+  margin-right: 5px;
+  font-size: 14px;
+}
+
+.count-sort-group input,
+.count-sort-group select {
+  display: inline-block;
+  width: 120px;
+  padding: 8px 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  outline: none;
+  margin-top: 5px;
+}
+
+.count-sort-group input:focus,
+.count-sort-group select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0,123,255,0.3);
 }
