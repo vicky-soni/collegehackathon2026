@@ -7,6 +7,33 @@
     <title>Number Sorting Game</title>
 </head>
 <body>
-  <h1>Welcome to Game</h1>  
+  <div class="container">
+  <h1>Numbers Sorting Game</h1>
+
+  <div class="box">
+    <label>From:</label>
+    <input type="number" id="min" value="1">
+
+    <label>To:</label>
+    <input type="number" id="max" value="100">
+
+    <label>Count:</label>
+    <input type="number" id="count" value="10">
+
+    <br><br>
+
+    <label>Sort Type:</label>
+    <select id="sortType">
+      <option value="asc">Ascending</option>
+      <option value="desc">Descending</option>
+    </select>
+
+    <br><br>
+
+    <button onclick="startGame()">Play</button>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
 </body>
 </html>
