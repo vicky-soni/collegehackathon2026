@@ -37,8 +37,20 @@ if (level === "Hard") {
 function generateNumbers() {
 
     let set = new Set();
+    let maxUniqueIntegers = to - from + 1;
+
+    if (!floatMode && count > maxUniqueIntegers) {
+        throw new Error("Invalid settings: count exceeds available unique integers in range.");
+    }
+
+    let attempts = 0;
+    let maxAttempts = count * 1000;
 
     while (set.size < count) {
+        attempts++;
+        if (attempts > maxAttempts) {
+            throw new Error("Could not generate enough unique numbers with current settings.");
+        }
 
         let num;
 
@@ -58,7 +70,13 @@ function generateNumbers() {
     return Array.from(set);
 }
 
-let originalNumbers = generateNumbers();
+let originalNumbers;
+try {
+    originalNumbers = generateNumbers();
+} catch (error) {
+    alert(error.message);
+    window.location.href = "index.html";
+}
 
 
 // ================= BUBBLE SORT =================
