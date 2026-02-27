@@ -1,17 +1,60 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Result</title>
-  <link rel="stylesheet" href="css/style.css">
+<title>Game Result</title>
+<link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
-<h1>Game Result</h1>
+<div class="result-container">
 
-<div id="resultBox"></div>
+<h2>Game Result</h2>
 
-<button onclick="goHome()">Home</button>
+<div class="section">
+<span class="label">Level:</span>
+<span id="level"></span>
+</div>
+
+<div class="section">
+<span class="label">Sort Type:</span>
+<span id="sortType"></span>
+</div>
+
+<div class="section">
+<span class="label">Original Numbers:</span>
+<div class="box" id="original"></div>
+</div>
+
+<div class="section">
+<span class="label">Correct Sorted (Bubble Sort):</span>
+<div class="box" id="correct"></div>
+</div>
+
+<div class="section">
+<span class="label">Your Answer:</span>
+<div class="box" id="user"></div>
+</div>
+
+<div class="section">
+<span class="label">Accuracy:</span>
+<span id="accuracy"></span> %
+</div>
+
+<div class="section score-box">
+Score: <span id="score"></span>
+</div>
+
+<div class="section">
+<span class="label">Status:</span>
+<span id="status"></span>
+</div>
+
+<button onclick="goHome()">Back to Home</button>
+
+</div>
 
 <script src="js/result.js"></script>
+
 </body>
 </html>
