@@ -27,7 +27,7 @@ document.getElementById("playBtn").onclick = function () {
     let toNum = Number(to);
     let countNum = Number(count);
 
-    if (!Number.isInteger(countNum) || countNum < 1) {
+    if (!Number.isInteger(countNum) || countNum < 2) {
         alert("Count must be a whole number greater than or equal to 1.");
         return;
     }
