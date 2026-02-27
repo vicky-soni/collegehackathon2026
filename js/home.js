@@ -17,9 +17,9 @@ document.getElementById("playBtn").onclick = function () {
         alert("Range cannot be Less than 1");
         return;
     }
-    else if (Number(to) > 50)
+    else if (Number(count) > 50)
     {
-        alert("Range cannot be greater than 50");
+        alert("Count cannot be greater than 50");
         return;
     }
 

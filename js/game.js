@@ -1,4 +1,3 @@
-// ================= LOAD SETTINGS =================
 
 let settings = JSON.parse(localStorage.getItem("gameSettings"));
 
@@ -11,40 +10,29 @@ let to = settings.to;
 let count = settings.count;
 let level = settings.level;
 let sortType = settings.sort;
-
-
-// ================= LEVEL RULES =================
-
 let timeLimit;
 let floatMode = false;
 
 if (level === "Easy") {
-    timeLimit = null; // No timer
-}
-
-if (level === "Medium") {
     timeLimit = count * 5;
 }
 
+if (level === "Medium") {
+    timeLimit = count * 2;
+}
+
 if (level === "Hard") {
-    timeLimit = count * 4;
+    timeLimit = count * 1.5;
     floatMode = true;
 }
 
 
-// ================= GENERATE UNIQUE NUMBERS =================
-
 function generateNumbers() {
 
     let set = new Set();
-    let maxUniqueIntegers = to - from + 1;
-
-    if (!floatMode && count > maxUniqueIntegers) {
-        throw new Error("Invalid settings: count exceeds available unique integers in range.");
-    }
 
     let attempts = 0;
-    let maxAttempts = count * 1000;
+    let maxAttempts = count * 2;
 
     while (set.size < count) {
         attempts++;
@@ -79,8 +67,6 @@ try {
 }
 
 
-// ================= BUBBLE SORT =================
-
 function bubbleSort(arr, asc = true) {
 
     let a = [...arr];
@@ -104,8 +90,6 @@ let correctAnswer = bubbleSort(
 );
 
 
-// ================= GAME VARIABLES =================
-
 let expectedIndex = 0;
 let userAnswer = [];
 let totalClicks = 0;
@@ -113,8 +97,6 @@ let totalClicks = 0;
 let container = document.getElementById("numbersContainer");
 let selectedBox = document.getElementById("selectedNumbers");
 
-
-// ================= SAFE RANDOM POSITION =================
 
 let usedPositions = [];
 
@@ -145,9 +127,6 @@ function getSafePosition() {
     return { x, y };
 }
 
-
-// ================= CREATE CIRCLES =================
-
 function createCircles() {
 
     container.innerHTML = "";
@@ -173,8 +152,6 @@ function createCircles() {
 }
 
 
-// ================= CLICK LOGIC =================
-
 function handleClick(element, value) {
 
     totalClicks++;
@@ -198,8 +175,6 @@ function handleClick(element, value) {
     } else {
 
         element.classList.add("wrong");
-
-        // small shake effect
         element.style.transform = "translateX(5px)";
         setTimeout(() => element.style.transform = "translateX(-5px)", 100);
         setTimeout(() => {
@@ -210,18 +185,10 @@ function handleClick(element, value) {
 }
 
 
-// ================= TIMER =================
-
 let timerInterval;
 let timeRemaining = timeLimit;
 
 function startTimer() {
-
-    if (timeLimit === null) {
-        document.getElementById("timer").innerText = "∞";
-        return;
-    }
-
     updateTimer();
 
     timerInterval = setInterval(() => {
@@ -246,13 +213,10 @@ function updateTimer() {
 }
 
 
-// ================= FINISH GAME =================
-
 function finishGame(userFinished) {
 
     clearInterval(timerInterval);
 
-    // Accuracy based on minimum optimal clicks
     let accuracy = totalClicks === 0
         ? 0
         : ((count / totalClicks) * 100);
@@ -261,7 +225,6 @@ function finishGame(userFinished) {
 
     accuracy = accuracy.toFixed(2);
 
-    // Score formula
     let score = Math.floor(
         accuracy * 5 + (timeRemaining || 0) * 3
     );
@@ -280,14 +243,10 @@ function finishGame(userFinished) {
 }
 
 
-// ================= EXIT =================
-
 function goHome() {
     window.location.href = "index.html";
 }
 
-
-// ================= AUTO START =================
 
 createCircles();
 startTimer();
