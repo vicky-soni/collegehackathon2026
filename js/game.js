@@ -20,9 +20,6 @@ if (level === "Hard") {
     floatMode = true;
 }
 
-/* ===========================
-   NUMBER GENERATION
-=========================== */
 
 function generateNumbers() {
     let numbers = [];
@@ -37,7 +34,6 @@ function generateNumbers() {
         }
     }
 
-    // Shuffle (Fisher-Yates)
     for (let i = numbers.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
@@ -48,12 +44,8 @@ function generateNumbers() {
 
 const originalNumbers = generateNumbers();
 
-/* ===========================
-   🔵 BUBBLE SORT IMPLEMENTATION
-=========================== */
-
 function bubbleSort(arr, ascending = true) {
-    let sorted = [...arr]; // Copy array
+    let sorted = [...arr];
     let n = sorted.length;
 
     for (let i = 0; i < n - 1; i++) {
@@ -64,7 +56,6 @@ function bubbleSort(arr, ascending = true) {
                 (ascending && sorted[j] > sorted[j + 1]) ||
                 (!ascending && sorted[j] < sorted[j + 1])
             ) {
-                // Swap
                 let temp = sorted[j];
                 sorted[j] = sorted[j + 1];
                 sorted[j + 1] = temp;
@@ -73,7 +64,6 @@ function bubbleSort(arr, ascending = true) {
             }
         }
 
-        // Optimization: stop if already sorted
         if (!swapped) break;
     }
 
@@ -93,9 +83,6 @@ let timeRemaining = timeLimit;
 const container = document.getElementById("numbersContainer");
 const selectedBox = document.getElementById("selectedNumbers");
 
-/* ===========================
-   CREATE RANDOM CIRCLES
-=========================== */
 
 function createCirclesRandom() {
     container.innerHTML = "";
@@ -155,10 +142,6 @@ function createCirclesRandom() {
     container.style.height = containerHeight + "px";
 }
 
-/* ===========================
-   CLICK HANDLING
-=========================== */
-
 function handleClick(element, value) {
     totalClicks++;
 
@@ -179,11 +162,6 @@ function handleClick(element, value) {
         setTimeout(() => element.classList.remove("wrong"), 300);
     }
 }
-
-/* ===========================
-   TIMER
-=========================== */
-
 function startTimer() {
     updateTimer();
 
@@ -205,10 +183,6 @@ function updateTimer() {
     document.getElementById("timer").innerText =
         `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
 }
-
-/* ===========================
-   FINISH GAME
-=========================== */
 
 function finishGame(userFinished) {
 
