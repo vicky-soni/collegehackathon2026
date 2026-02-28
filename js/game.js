@@ -1,5 +1,4 @@
 const settings = JSON.parse(localStorage.getItem("gameSettings"));
-
 if (!settings) window.location.href = "index.html";
 
 const from = Number(settings.from);
@@ -7,10 +6,12 @@ const to = Number(settings.to);
 const count = Number(settings.count);
 const level = settings.level;
 const sortType = settings.sort;
+
 let floatMode = false;
 let timeLimit = 0;
-document.getElementById("game-mode").innerText = "Level : " + level
-document.getElementById("sort-type").innerText = "Sort : " + sortType
+
+document.getElementById("game-mode").innerText = "Level : " + level;
+document.getElementById("sort-type").innerText = "Sort : " + sortType;
 
 if (level === "Easy") timeLimit = count * 5;
 if (level === "Medium") timeLimit = count * 2;
@@ -18,6 +19,10 @@ if (level === "Hard") {
     timeLimit = count * 1.5;
     floatMode = true;
 }
+
+/* ===========================
+   NUMBER GENERATION
+=========================== */
 
 function generateNumbers() {
     let numbers = [];
@@ -32,11 +37,7 @@ function generateNumbers() {
         }
     }
 
-    if (count > numbers.length) {
-        alert("Range too small for selected count.");
-        window.location.href = "index.html";
-    }
-
+    // Shuffle (Fisher-Yates)
     for (let i = numbers.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
@@ -47,11 +48,42 @@ function generateNumbers() {
 
 const originalNumbers = generateNumbers();
 
-function sortNumbers(arr, ascending = true) {
-    return [...arr].sort((a, b) => ascending ? a - b : b - a);
+/* ===========================
+   🔵 BUBBLE SORT IMPLEMENTATION
+=========================== */
+
+function bubbleSort(arr, ascending = true) {
+    let sorted = [...arr]; // Copy array
+    let n = sorted.length;
+
+    for (let i = 0; i < n - 1; i++) {
+        let swapped = false;
+
+        for (let j = 0; j < n - i - 1; j++) {
+            if (
+                (ascending && sorted[j] > sorted[j + 1]) ||
+                (!ascending && sorted[j] < sorted[j + 1])
+            ) {
+                // Swap
+                let temp = sorted[j];
+                sorted[j] = sorted[j + 1];
+                sorted[j + 1] = temp;
+
+                swapped = true;
+            }
+        }
+
+        // Optimization: stop if already sorted
+        if (!swapped) break;
+    }
+
+    return sorted;
 }
 
-const correctAnswer = sortNumbers(originalNumbers, sortType === "ascending");
+const correctAnswer = bubbleSort(
+    originalNumbers,
+    sortType === "ascending"
+);
 
 let expectedIndex = 0;
 let userAnswer = [];
@@ -61,19 +93,22 @@ let timeRemaining = timeLimit;
 const container = document.getElementById("numbersContainer");
 const selectedBox = document.getElementById("selectedNumbers");
 
+/* ===========================
+   CREATE RANDOM CIRCLES
+=========================== */
+
 function createCirclesRandom() {
     container.innerHTML = "";
 
-    const minCircleSize = 50; 
+    const minCircleSize = 50;
     let circleSize = minCircleSize;
-    let spacing = 10; 
-    let usedPositions = [];
+    let spacing = 10;
 
-    let containerWidth = 800; 
+    let usedPositions = [];
+    let containerWidth = 800;
     let containerHeight = 260;
 
     originalNumbers.forEach((num) => {
-
         const div = document.createElement("div");
         div.className = "number";
         div.style.width = circleSize + "px";
@@ -99,7 +134,6 @@ function createCirclesRandom() {
             if (!collides) break;
 
             attempts++;
-
             if (attempts % 100 === 0) {
                 containerWidth += 50;
                 containerHeight += 50;
@@ -114,7 +148,6 @@ function createCirclesRandom() {
         div.style.top = pos.y + "px";
 
         div.addEventListener("click", () => handleClick(div, num));
-
         container.appendChild(div);
     });
 
@@ -122,6 +155,9 @@ function createCirclesRandom() {
     container.style.height = containerHeight + "px";
 }
 
+/* ===========================
+   CLICK HANDLING
+=========================== */
 
 function handleClick(element, value) {
     totalClicks++;
@@ -138,13 +174,15 @@ function handleClick(element, value) {
         expectedIndex++;
 
         if (expectedIndex === count) finishGame(true);
-
     } else {
         element.classList.add("wrong");
-
         setTimeout(() => element.classList.remove("wrong"), 300);
     }
 }
+
+/* ===========================
+   TIMER
+=========================== */
 
 function startTimer() {
     updateTimer();
@@ -163,11 +201,17 @@ function startTimer() {
 function updateTimer() {
     const m = Math.floor(timeRemaining / 60);
     const s = timeRemaining % 60;
+
     document.getElementById("timer").innerText =
         `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
 }
 
+/* ===========================
+   FINISH GAME
+=========================== */
+
 function finishGame(userFinished) {
+
     let accuracy = totalClicks === 0
         ? 0
         : ((count / totalClicks) * 100);
